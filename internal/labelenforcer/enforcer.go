@@ -15,6 +15,7 @@ import (
 
 const queryParamName = "query"
 const queryURLPath = "/api/v1/query"
+const queryRangeURLPath = "/api/v1/query_range"
 
 var _ http.RoundTripper = &Enforcer{}
 
@@ -73,7 +74,7 @@ func (e *Enforcer) HasLabels(query string) error {
 
 // enforce checks if the request is a Prometheus query and enforces the label filters.
 func (e *Enforcer) enforce(req *http.Request) error {
-	if req.URL.Path != queryURLPath {
+	if req.URL.Path != queryURLPath && req.URL.Path != queryRangeURLPath {
 		return nil
 	}
 
