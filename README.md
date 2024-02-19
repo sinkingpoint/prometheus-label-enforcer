@@ -13,15 +13,16 @@ Flags:
   -h, --help                          Show context-sensitive help.
       --listen-address=":4278"        Address to listen on for HTTP requests.
       --backend-url="http://:9090"    URL of the backend to proxy requests to.
+      --log-level="info"              the level of logs to output.
       --labels=LABELS,...             Comma-separated list of labels to enforce.
 ```
 
 e.g.
 
 ```
-./label-enforcer --labels colo_name,colo_id
+./label-enforcer --labels foo,bar
 ```
 
-will block all query requests that don't have a `colo_name=` or `colo_id=` filter.
+will block all query requests that don't have a `foo=` or `bar=` filter.
 
-Note that you can still achieve heavier queries with a regex, e.g. `my_metric{colo_name=~".+"}`, but the label-enforcer makes those heavier queries opt-in, rather than the default.
+Note that you can still achieve heavier queries with a regex, e.g. `my_metric{foo=~".+"}`, but the label-enforcer makes those heavier queries opt-in, rather than the default.
