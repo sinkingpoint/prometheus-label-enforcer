@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+// PrometheusError is the error response format for Prometheus.
+// See: https://prometheus.io/docs/prometheus/latest/querying/api/
 type PrometheusError struct {
 	Status    string `json:"status"`
 	ErrorType string `json:"errorType"`
