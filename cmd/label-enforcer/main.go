@@ -5,6 +5,7 @@ import (
 	"net/url"
 
 	"github.com/alecthomas/kong"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	labelenforcer "github.com/sinkingpoint/label-enforcer/internal/labelenforcer"
 )
@@ -12,6 +13,7 @@ import (
 var CLI struct {
 	ListenAddress string   `default:":4278" help:"Address to listen on for HTTP requests."`
 	BackendURL    string   `default:"http://:9090" help:"URL of the backend to proxy requests to."`
+	LogLevel      string   `default:"info" enum:"debug,info,error" help:"the level of logs to output."`
 	Labels        []string `required:"true" help:"Comma-separated list of labels to enforce."`
 }
 
@@ -21,6 +23,17 @@ func main() {
 	})
 
 	kong.Parse(&CLI)
+
+	switch CLI.LogLevel {
+	case "debug":
+		log.Logger = log.Logger.Level(zerolog.DebugLevel)
+	case "info":
+		log.Logger = log.Logger.Level(zerolog.InfoLevel)
+	case "error":
+		log.Logger = log.Logger.Level(zerolog.ErrorLevel)
+	default:
+		log.Fatal().Msgf("invalid log level: %s", CLI.LogLevel)
+	}
 
 	backendURL, err := url.Parse(CLI.BackendURL)
 	if err != nil {
